@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /products/{productId} {
+      // MVP TEMPORAL:
+      // cualquier visitante puede leer, crear, editar y eliminar productos.
+      allow read, write: if true;
+    }
+  }
+}
