@@ -5,10 +5,7 @@ import '../../domain/entities/product_offer.dart';
 class ProductFormSheet extends StatefulWidget {
   final ProductOffer? product;
 
-  const ProductFormSheet({
-    super.key,
-    this.product,
-  });
+  const ProductFormSheet({super.key, this.product});
 
   @override
   State<ProductFormSheet> createState() => _ProductFormSheetState();
@@ -42,8 +39,9 @@ class _ProductFormSheetState extends State<ProductFormSheet> {
       text: product == null ? '' : _formatInitialQuantity(product.quantity),
     );
     _brandController = TextEditingController(text: product?.brand ?? '');
-    _supermarketController =
-        TextEditingController(text: product?.supermarket ?? '');
+    _supermarketController = TextEditingController(
+      text: product?.supermarket ?? '',
+    );
     _noteController = TextEditingController(text: product?.note ?? '');
 
     _unit = product?.unit ?? 'g';
@@ -140,9 +138,7 @@ class _ProductFormSheetState extends State<ProductFormSheet> {
                       children: [
                         Expanded(
                           child: Text(
-                            _isEditing
-                                ? 'Editar producto'
-                                : 'Agregar producto',
+                            _isEditing ? 'Editar producto' : 'Agregar producto',
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),

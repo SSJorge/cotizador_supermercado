@@ -17,10 +17,12 @@ class FirestoreProductRepository implements ProductRepository {
 
     return snapshot.docs
         .map((doc) => ProductOffer.fromMap(doc.id, doc.data()))
-        .where((product) =>
-            product.name.isNotEmpty &&
-            product.price > 0 &&
-            product.quantity > 0)
+        .where(
+          (product) =>
+              product.name.isNotEmpty &&
+              product.price > 0 &&
+              product.quantity > 0,
+        )
         .toList();
   }
 

@@ -67,9 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            product == null
-                ? 'Producto agregado'
-                : 'Producto actualizado',
+            product == null ? 'Producto agregado' : 'Producto actualizado',
           ),
         ),
       );
@@ -113,11 +111,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _showError(Object error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Error: $error'),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Error: $error')));
   }
 
   List<ProductOffer> _filterAndSort(List<ProductOffer> source) {
@@ -130,17 +126,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     products.sort((a, b) {
       if (query.isEmpty) {
-        final byName =
-            a.normalizedName.compareTo(b.normalizedName);
+        final byName = a.normalizedName.compareTo(b.normalizedName);
         if (byName != 0) return byName;
       }
 
-      final byType =
-          a.measurementType.compareTo(b.measurementType);
+      final byType = a.measurementType.compareTo(b.measurementType);
       if (byType != 0) return byType;
 
-      final byValue =
-          a.pricePerBaseUnit.compareTo(b.pricePerBaseUnit);
+      final byValue = a.pricePerBaseUnit.compareTo(b.pricePerBaseUnit);
       if (byValue != 0) return byValue;
 
       return a.price.compareTo(b.price);
@@ -149,18 +142,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return products;
   }
 
-  Map<String, double> _bestPriceByMeasurement(
-    List<ProductOffer> products,
-  ) {
+  Map<String, double> _bestPriceByMeasurement(List<ProductOffer> products) {
     final result = <String, double>{};
 
     for (final product in products) {
       final current = result[product.measurementType];
 
-      if (current == null ||
-          product.pricePerBaseUnit < current) {
-        result[product.measurementType] =
-            product.pricePerBaseUnit;
+      if (current == null || product.pricePerBaseUnit < current) {
+        result[product.measurementType] = product.pricePerBaseUnit;
       }
     }
 
@@ -193,14 +182,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onRefresh: _refresh,
         child: productsAsync.when(
           loading: () => const _ScrollableLoading(),
-          error: (error, _) => _ScrollableError(
-            error: error,
-            onRetry: _refresh,
-          ),
+          error: (error, _) =>
+              _ScrollableError(error: error, onRetry: _refresh),
           data: (source) {
             final products = _filterAndSort(source);
-            final bestByType =
-                _bestPriceByMeasurement(products);
+            final bestByType = _bestPriceByMeasurement(products);
 
             return ListView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -215,17 +201,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       decoration: InputDecoration(
                         hintText: 'Buscar producto, ej: leche',
                         prefixIcon: const Icon(Icons.search),
-                        suffixIcon:
-                            _searchController.text.isEmpty
-                                ? null
-                                : IconButton(
-                                    tooltip: 'Limpiar',
-                                    onPressed: () {
-                                      _searchController.clear();
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(Icons.clear),
-                                  ),
+                        suffixIcon: _searchController.text.isEmpty
+                            ? null
+                            : IconButton(
+                                tooltip: 'Limpiar',
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() {});
+                                },
+                                icon: const Icon(Icons.clear),
+                              ),
                         border: const OutlineInputBorder(),
                       ),
                     ),
@@ -257,21 +242,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 if (searching && products.isNotEmpty) ...[
                   Center(
                     child: ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(maxWidth: 800),
+                      constraints: const BoxConstraints(maxWidth: 800),
                       child: const Card(
                         child: Padding(
                           padding: EdgeInsets.all(12),
                           child: Row(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Icon(Icons.info_outline),
                               SizedBox(width: 10),
                               Expanded(
                                 child: Text(
                                   'La comparación usa precio por cantidad: '
-                                  '$/100 g, $/100 ml o $/unidad. '
+                                  r'$/100 g, $/100 ml o $/unidad. '
                                   'Kg y L se normalizan automáticamente.',
                                 ),
                               ),
@@ -287,37 +270,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const Padding(
                     padding: EdgeInsets.only(top: 64),
                     child: Center(
-                      child: Text(
-                        'No hay productos para mostrar.',
-                      ),
+                      child: Text('No hay productos para mostrar.'),
                     ),
                   )
                 else
                   ...products.map((product) {
-                    final best =
-                        bestByType[product.measurementType];
+                    final best = bestByType[product.measurementType];
 
-                    final isBest = searching &&
+                    final isBest =
+                        searching &&
                         best != null &&
-                        (product.pricePerBaseUnit - best).abs() <
-                            0.000000001;
+                        (product.pricePerBaseUnit - best).abs() < 0.000000001;
 
                     return Center(
                       child: ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(maxWidth: 800),
+                        constraints: const BoxConstraints(maxWidth: 800),
                         child: Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 10),
                           child: _ProductCard(
                             product: product,
                             isBest: isBest,
                             money: _money,
                             decimal: _decimal,
-                            onEdit: () =>
-                                _openProductForm(product: product),
-                            onDelete: () =>
-                                _deleteProduct(product),
+                            onEdit: () => _openProductForm(product: product),
+                            onDelete: () => _deleteProduct(product),
                           ),
                         ),
                       ),
@@ -371,28 +347,21 @@ class _ProductCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Wrap(
                         spacing: 8,
                         runSpacing: 6,
-                        crossAxisAlignment:
-                            WrapCrossAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
                             product.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           if (isBest)
                             const Chip(
-                              avatar:
-                                  Icon(Icons.star, size: 18),
+                              avatar: Icon(Icons.star, size: 18),
                               label: Text('MEJOR COMPRA'),
                             ),
                         ],
@@ -400,9 +369,7 @@ class _ProductCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         '${product.brand} · ${product.supermarket}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),
@@ -438,14 +405,10 @@ class _ProductCard extends StatelessWidget {
               spacing: 10,
               runSpacing: 10,
               children: [
-                _Metric(
-                  label: 'Precio',
-                  value: money.format(product.price),
-                ),
+                _Metric(label: 'Precio', value: money.format(product.price)),
                 _Metric(
                   label: 'Cantidad',
-                  value:
-                      '${decimal.format(product.quantity)} ${product.unit}',
+                  value: '${decimal.format(product.quantity)} ${product.unit}',
                 ),
                 _Metric(
                   label: 'Comparación',
@@ -455,15 +418,14 @@ class _ProductCard extends StatelessWidget {
                 _Metric(
                   label: 'Cantidad / precio',
                   value:
-                      '${_formatYield(product.quantityPerPeso)} ${product.baseUnit} / $1',
+                      '${_formatYield(product.quantityPerPeso)} ${product.baseUnit} / \$1',
                 ),
               ],
             ),
             if (note != null && note.isNotEmpty) ...[
               const SizedBox(height: 12),
               Row(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(Icons.notes, size: 18),
                   const SizedBox(width: 8),
@@ -482,39 +444,27 @@ class _Metric extends StatelessWidget {
   final String label;
   final String value;
 
-  const _Metric({
-    required this.label,
-    required this.value,
-  });
+  const _Metric({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(minWidth: 145),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 9,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .surfaceContainerHighest,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
+          Text(label, style: Theme.of(context).textTheme.labelSmall),
           const SizedBox(height: 2),
           Text(
             value,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(fontWeight: FontWeight.w600),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -541,10 +491,7 @@ class _ScrollableError extends StatelessWidget {
   final Object error;
   final Future<void> Function() onRetry;
 
-  const _ScrollableError({
-    required this.error,
-    required this.onRetry,
-  });
+  const _ScrollableError({required this.error, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -555,18 +502,9 @@ class _ScrollableError extends StatelessWidget {
         const SizedBox(height: 120),
         const Icon(Icons.error_outline, size: 48),
         const SizedBox(height: 12),
-        const Center(
-          child: Text(
-            'No se pudieron cargar los datos.',
-          ),
-        ),
+        const Center(child: Text('No se pudieron cargar los datos.')),
         const SizedBox(height: 8),
-        Center(
-          child: Text(
-            error.toString(),
-            textAlign: TextAlign.center,
-          ),
-        ),
+        Center(child: Text(error.toString(), textAlign: TextAlign.center)),
         const SizedBox(height: 16),
         Center(
           child: FilledButton.icon(
