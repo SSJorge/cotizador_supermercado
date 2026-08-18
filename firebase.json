@@ -14,26 +14,28 @@
         "source": "**",
         "destination": "/index.html"
       }
-    ],
-    "headers": [
-      {
-        "source": "/index.html",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "no-cache"
-          }
-        ]
-      },
-      {
-        "source": "**/*.@(mjs|js|wasm|json)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=0,s-maxage=604800"
-          }
-        ]
-      }
     ]
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "cotizador-supermercado",
+          "appId": "1:1042563582649:android:7a4e49c451f4e22aee6968",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "cotizador-supermercado",
+          "configurations": {
+            "android": "1:1042563582649:android:7a4e49c451f4e22aee6968",
+            "ios": "1:1042563582649:ios:cf47dd897f2719a6ee6968",
+            "macos": "1:1042563582649:ios:cf47dd897f2719a6ee6968",
+            "web": "1:1042563582649:web:8635d64766ef63a5ee6968"
+          }
+        }
+      }
+    }
   }
 }

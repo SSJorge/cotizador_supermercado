@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "cotizador-supermercado": "cotizador-supermercado",
+    "default": "cotizador-supermercado"
+  },
+  "targets": {},
+  "etags": {}
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1042563582649",
+    "project_id": "cotizador-supermercado",
+    "storage_bucket": "cotizador-supermercado.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042563582649:android:7a4e49c451f4e22aee6968",
+        "android_client_info": {
+          "package_name": "com.example.cotizador_supermercado"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoE85xAJS6HYEJEx-tnh0WZNU8AofKrQc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
